@@ -7,21 +7,18 @@ const useSignup = () => {
 	const { setAuthUser } = useAuthContext();
 
 	const signup = async ({ fullName, username, password, confirmPassword, gender }) => {
-		const success = handleInputErrors({ fullName, username, password, confirmPassword, gender });
-		if (!success) return;
+		if (!handleInputErrors({ fullName, username, password, confirmPassword, gender })) return;
 
 		setLoading(true);
 		try {
-			const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/signup`, {
+			console.log("API URL:", import.meta.env.VITE_API_URL);
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ fullName, username, password, confirmPassword, gender }),
 			});
-
 			const data = await res.json();
-			if (data.error) {
-				throw new Error(data.error);
-			}
+			if (data.error) throw new Error(data.error);
 			localStorage.setItem("chat-user", JSON.stringify(data));
 			setAuthUser(data);
 		} catch (error) {
@@ -40,16 +37,13 @@ function handleInputErrors({ fullName, username, password, confirmPassword, gend
 		toast.error("Please fill in all fields");
 		return false;
 	}
-
 	if (password !== confirmPassword) {
 		toast.error("Passwords do not match");
 		return false;
 	}
-
 	if (password.length < 6) {
 		toast.error("Password must be at least 6 characters");
 		return false;
 	}
-
 	return true;
 }

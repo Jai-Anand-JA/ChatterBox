@@ -9,11 +9,10 @@ const useGetConversations = () => {
 		const getConversations = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users`);
+				console.log("API URL:", import.meta.env.VITE_API_URL);
+				const res = await fetch(`${import.meta.env.VITE_API_URL}/api/users`);
 				const data = await res.json();
-				if (data.error) {
-					throw new Error(data.error);
-				}
+				if (data.error) throw new Error(data.error);
 				setConversations(data);
 			} catch (error) {
 				toast.error(error.message);
