@@ -7,16 +7,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
 	cors: {
-		origin: (origin, callback) => {
-			if (!origin || origin.includes("vercel.app")) {
-				callback(null, true);
-			} else {
-				callback(new Error("Not allowed by CORS for socket"));
-			}
-		},
+		origin: ["http://localhost:3000"],
 		methods: ["GET", "POST"],
-		credentials: true
-	}
+	},
 });
 
 export const getReceiverSocketId = (receiverId) => {

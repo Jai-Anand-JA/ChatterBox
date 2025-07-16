@@ -15,15 +15,15 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io(import.meta.env.VITE_API_URL, {
+			const socket = io("https://chat-app-yt.onrender.com", {
 				query: {
 					userId: authUser._id,
 				},
-				withCredentials: true
 			});
 
 			setSocket(socket);
 
+			// socket.on() is used to listen to the events. can be used both on client and server side
 			socket.on("getOnlineUsers", (users) => {
 				setOnlineUsers(users);
 			});
@@ -37,9 +37,5 @@ export const SocketContextProvider = ({ children }) => {
 		}
 	}, [authUser]);
 
-	return (
-		<SocketContext.Provider value={{ socket, onlineUsers }}>
-			{children}
-		</SocketContext.Provider>
-	);
+	return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
 };
