@@ -16,10 +16,22 @@ console.log("Loaded MONGO_DB_URI:", process.env.MONGO_DB_URI);
 
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = [
+    "https://chatter-hjceh5giy-jai-anand-jas-projects.vercel.app",
+    "https://chatter-odrjm4jg9-jai-anand-jas-projects.vercel.app"
+];
+
 app.use(cors({
-    origin: ["https://chatter-hjceh5giy-jai-anand-jas-projects.vercel.app"], 
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
