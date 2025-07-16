@@ -13,7 +13,14 @@ dotenv.config({ path: "./backend/.env" });
 console.log("Loaded MONGO_DB_URI:", process.env.MONGO_DB_URI);
 
 app.use(cors({
-    origin: "*"
+    origin: (origin, callback) => {
+        if (!origin || origin.includes("vercel.app")) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }));
 
 app.use(express.json());

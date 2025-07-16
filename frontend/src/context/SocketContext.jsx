@@ -15,10 +15,11 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io(process.env.REACT_APP_API_URL, {
+			const socket = io(import.meta.env.VITE_API_URL, {
 				query: {
 					userId: authUser._id,
 				},
+				withCredentials: true
 			});
 
 			setSocket(socket);
@@ -36,5 +37,9 @@ export const SocketContextProvider = ({ children }) => {
 		}
 	}, [authUser]);
 
-	return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
+	return (
+		<SocketContext.Provider value={{ socket, onlineUsers }}>
+			{children}
+		</SocketContext.Provider>
+	);
 };
